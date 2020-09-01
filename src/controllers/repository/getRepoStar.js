@@ -1,18 +1,28 @@
 const fetch = require("node-fetch");
-const repository = require(".");
-
-const transformer = (repository) => ({
-  name: repository.name,
-  fullName: repository.full_name,
-  descrition: repository.descrition,
-  url: repository.url,
-  html_url: repository.html_url,
-});
+const repositoriesRepository = require("../../infra/repository/repositories");
 
 module.exports = async function getRepoStar(req, res) {
-  const githubStarEndpoint = `https://api.github.com/users/${req.params.username}/starred`;
-  const result = await fetch(githubStarEndpoint);
-  const repo = await result.json();
+  const { username } = req.params;
 
-  res.json({ repo: repo.map(transformer), count: repo.length });
+  try {
+    const data = await repositoriesRepository.getRepository({ username });
+    if (data.length > 0) {
+      return res.json({ repo: data, count: data.length });
+    }
+
+    const githubStarEndpoint = `https://api.github.com/users/${username}/starred`;
+    const repoStarsGithub = await fetch(githubStarEndpoint);
+    const repoStarsGithubJson = await repoStarsGithub.json();
+    const repositoriesStars = await repositoriesRepository.saveRepositories(
+      repoStarsGithubJson,
+      username
+    );
+
+    res.json({
+      repo: repositoriesStars,
+      count: repositoriesStars.length,
+    });
+  } catch (error) {
+    res.json(500, { error: error });
+  }
 };

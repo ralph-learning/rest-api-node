@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const repositoryCotroller = require("./controllers/repository");
+require("./database");
 
 const app = express();
 
