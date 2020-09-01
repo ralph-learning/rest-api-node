@@ -9,7 +9,7 @@ app.get("/", (_req, res) => {
   res.json({ message: "Hello world" });
 });
 
-// app.get("/repositories", repositoryCotroller.getByUser);
+app.get("/repositories/:username", repositoryCotroller.getRepoStar);
 
 app.listen(4000, () => {
   console.log("Running at port 4000");
