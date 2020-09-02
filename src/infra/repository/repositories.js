@@ -19,10 +19,8 @@ async function saveRepositories(payload, username) {
   });
 
   try {
-    const data = await repo.save();
-    return data;
+    return await repo.save();
   } catch (error) {
-    winston.error(error);
     throw error;
   }
 }
@@ -32,7 +30,6 @@ async function getRepository({ username }) {
     const data = await db.repository.findAll();
     return data;
   } catch (error) {
-    winston.error(error);
     throw error;
   }
 }

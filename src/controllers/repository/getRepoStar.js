@@ -24,7 +24,7 @@ module.exports = async function getRepoStar(req, res) {
       count: repositoriesStars.length,
     });
   } catch (error) {
-    winston.error(error);
-    res.json(500, { error: error.message });
+    winston.log("error", { message: error });
+    res.status(500).json({ error: error.message });
   }
 };
