@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const repositoriesRepository = require("../../infra/repository/repositories");
+const winston = require("../../../config/winston");
 
 module.exports = async function getRepoStar(req, res) {
   const { username } = req.params;
@@ -23,6 +24,7 @@ module.exports = async function getRepoStar(req, res) {
       count: repositoriesStars.length,
     });
   } catch (error) {
-    res.json(500, { error: error });
+    winston.error(error);
+    res.json(500, { error: error.message });
   }
 };

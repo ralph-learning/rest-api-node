@@ -1,4 +1,5 @@
-const repositoryModel = require("../../domain/repository.model");
+const winston = require("../../../config/winston");
+const db = require("../database/models/index");
 
 const transformer = (repository) => ({
   name: repository.name,
@@ -9,25 +10,30 @@ const transformer = (repository) => ({
 });
 
 async function saveRepositories(payload, username) {
-  const repo = new repositoryModel({
-    username,
-    repos: payload.map(transformer),
+  const repo = db.repository.build({
+    name: "John",
+    fullName: "John Doe",
+    html_url: "http://",
+    url: "http://",
+    descrition: "Any",
   });
 
   try {
-    const userRepositorieds = await repo.save();
-    return userRepositorieds;
+    const data = await repo.save();
+    return data;
   } catch (error) {
-    return error;
+    winston.error(error);
+    throw error;
   }
 }
 
 async function getRepository({ username }) {
   try {
-    const data = repositoryModel.find({ username });
+    const data = await db.repository.findAll();
     return data;
   } catch (error) {
-    return error;
+    winston.error(error);
+    throw error;
   }
 }
 
