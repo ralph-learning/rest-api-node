@@ -1,10 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const winston = require("../config/winston");
+
 const repositoryCotroller = require("./controllers/repository");
-require("./database");
+
+class MyStream {
+  write(message) {
+    winston.info(message);
+  }
+}
+let myStream = new MyStream();
 
 const app = express();
 
+app.use(morgan("dev", { stream: myStream }));
 app.use(bodyParser.json());
 app.get("/", (_req, res) => {
   res.json({ message: "Hello world" });
