@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const winston = require("../config/winston");
 
 const repositoryCotroller = require("./controllers/repository");
+const userCotroller = require("./controllers/user");
 
 class MyStream {
   write(message) {
@@ -23,7 +24,7 @@ app.get("/", (_req, res) => {
 app.get("/repositories/:username", repositoryCotroller.getRepoStar);
 app.post("/repositories", repositoryCotroller.create);
 
-app.get("/users/:username", repositoryCotroller.getUser);
+app.get("/users/:username", userCotroller.get);
 
 app.listen(4000, () => {
   console.log("Running at port 4000");
