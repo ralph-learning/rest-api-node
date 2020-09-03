@@ -1,6 +1,6 @@
 const db = require("../database/models/index");
 
-async function getUser(username) {
+async function getOrCreateUser(username) {
   const options = {
     where: { username: username },
     default: {
@@ -16,6 +16,18 @@ async function getUser(username) {
   }
 }
 
+async function getUser(username) {
+  try {
+    return await db.user.findOne({
+      username: username,
+      include: [{ model: db.repository, as: "repositories" }],
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
+  getOrCreateUser,
   getUser,
 };

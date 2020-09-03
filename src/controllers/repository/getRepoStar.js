@@ -15,7 +15,7 @@ module.exports = async function getRepoStar(req, res) {
   const { username } = req.params;
 
   try {
-    await userRepository.getUser(username);
+    await userRepository.getOrCreateUser(username);
 
     const githubStarEndpoint = `https://api.github.com/users/${username}/starred`;
     const repoStarsGithub = await fetch(githubStarEndpoint);

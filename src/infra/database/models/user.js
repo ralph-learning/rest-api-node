@@ -1,5 +1,4 @@
 const { Sequelize } = require("sequelize");
-const db = require("../models");
 
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define("user", {
@@ -11,6 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     username: DataTypes.STRING,
   });
+
+  user.associate = (models) => {
+    user.hasMany(models.repository, {
+      as: "repositories",
+      foreignKey: "userId",
+    });
+  };
 
   return user;
 };

@@ -21,6 +21,9 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/repositories/:username", repositoryCotroller.getRepoStar);
+app.post("/repositories", repositoryCotroller.create);
+
+app.get("/users/:username", repositoryCotroller.getUser);
 
 app.listen(4000, () => {
   console.log("Running at port 4000");
