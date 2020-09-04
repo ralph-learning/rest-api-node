@@ -11,7 +11,7 @@ class MyStream {
     winston.info(message);
   }
 }
-let myStream = new MyStream();
+const myStream = new MyStream();
 
 const app = express();
 
@@ -27,5 +27,5 @@ app.post("/repositories", repositoryCotroller.create);
 app.get("/users/:username", userCotroller.get);
 
 app.listen(4000, () => {
-  console.log("Running at port 4000");
+  winston.info("Running at port 4000");
 });
