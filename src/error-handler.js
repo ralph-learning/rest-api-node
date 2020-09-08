@@ -1,3 +1,5 @@
+const winston = require("../config/winston");
+
 const errorHandler = (err, _req, res, _next) => {
   const error = {
     statusCode: err.statusCode || 500,
@@ -5,6 +7,8 @@ const errorHandler = (err, _req, res, _next) => {
     message: err.message,
     stack: err.stack,
   };
+
+  winston.log("error", error);
 
   return res.status(error.statusCode).json({
     status: error.statusCode,
