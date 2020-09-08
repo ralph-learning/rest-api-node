@@ -1,14 +1,19 @@
-const winston = require("../../../config/winston");
 const userRepository = require("../../infra/repository/users");
+const { HttpNotFound } = require("../../utils/errors");
 
-module.exports = async function getUser(req, res) {
+module.exports = async function getUser(req, res, next) {
   try {
     const user = await userRepository.getUser({
       username: req.params.username,
     });
-    res.json(user);
+
+    if (user === null)
+      throw new HttpNotFound({
+        message: `The user '${req.params.username}' was not found`,
+      });
+
+    return res.json(user);
   } catch (error) {
-    winston.log("error", { message: error });
-    return res.status(500).json({ error: error.message });
+    next(error);
   }
 };
