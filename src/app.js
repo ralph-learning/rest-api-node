@@ -29,11 +29,11 @@ app.post("/repositories", repositoryCotroller.create);
 
 app.get("/users/:username", userCotroller.get);
 
-app.use(errorHandler);
-
 app.all("*", (req, _res, next) => {
   next(new HttpNotFound(`Can't find ${req.originalUrl} on this server!`));
 });
+
+app.use(errorHandler);
 
 app.listen(4000, () => {
   winston.info("Running at port 4000");

@@ -1,6 +1,5 @@
 const fetch = require("node-fetch");
 const userRepository = require("../../infra/repository/users");
-const winston = require("../../../config/winston");
 
 const transformer = (repository) => ({
   name: repository.name,
@@ -11,7 +10,7 @@ const transformer = (repository) => ({
   id: repository.id,
 });
 
-module.exports = async function getRepoStar(req, res) {
+module.exports = async function getRepoStar(req, res, next) {
   const { username } = req.params;
 
   try {
@@ -26,7 +25,6 @@ module.exports = async function getRepoStar(req, res) {
       count: repoStarsGithubJson.length,
     });
   } catch (error) {
-    winston.log("error", { message: error });
-    return res.status(500).json({ error: error.message });
+    next(error);
   }
 };
